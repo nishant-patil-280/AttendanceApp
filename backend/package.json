@@ -1,0 +1,11 @@
+{
+  "name": "com.attendanceapp",
+  "version": "1.0.0",
+  "description": "this is backend for attendance app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
