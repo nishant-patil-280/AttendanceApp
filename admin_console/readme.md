@@ -1,4 +1,4 @@
-### INSTALLATION
+### **INSTALLATION**
 ##### step 1: Install express framework
 `npm install -g express-generator`
 
@@ -23,7 +23,7 @@
 #### step 5: Run project
 `npm start`
 
-### WORKING
+### **WORKING**
 1. users.ejs takes input data from html form.
 2. data is then send to app.js where data is parsed and encoded through middleware.
 3. this data is then sent to user.js through userRouter in app.js.
