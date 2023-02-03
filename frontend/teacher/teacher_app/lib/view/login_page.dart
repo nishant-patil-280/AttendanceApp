@@ -152,7 +152,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               _saveForm;
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const MapSample()),
+                MaterialPageRoute(
+                    builder: (context) => const TeacherHomePage()),
               );
             },
             child: Text('Login'),

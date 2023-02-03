@@ -5,10 +5,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:teacher_app/view/new.dart';
 
 class Temp {
-  static double lat = 37.42796133580664;
-  static double lng = -122.085749655962;
+  static double lat = 19.0296;
+  static double lng = 73.0166;
 }
 
+//37.42796133580664
+//-122.085749655962
+//zoom - 14.4746
 class MapSample extends StatefulWidget {
   const MapSample({Key? key}) : super(key: key);
 
@@ -22,7 +25,7 @@ class MapSampleState extends State<MapSample> {
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(Temp.lat, Temp.lng),
-    zoom: 14.4746,
+    zoom: 20,
   );
 
   static final CameraPosition _kLake = CameraPosition(
@@ -46,7 +49,7 @@ class MapSampleState extends State<MapSample> {
       ),
       body: GoogleMap(
         markers: {_marker1},
-        mapType: MapType.normal,
+        mapType: MapType.hybrid,
         initialCameraPosition: _kGooglePlex,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);

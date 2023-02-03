@@ -1,6 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher_app/view/timetable.dart';
+import 'package:geolocator/geolocator.dart';
+
+void getLocation() async {
+  await Geolocator.checkPermission();
+  await Geolocator.requestPermission();
+  Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high);
+  print(position);
+}
 
 class TeacherHomePage extends StatefulWidget {
   const TeacherHomePage({Key? key}) : super(key: key);
@@ -45,6 +54,7 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
                           value: light0,
                           onChanged: (bool value) {
                             setState(() {
+                              getLocation();
                               light0 = value;
                             });
                           },
@@ -79,7 +89,10 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   ElevatedButton(
-                                      onPressed: () {}, child: Text('Go')),
+                                      onPressed: () {
+                                        getLocation;
+                                      },
+                                      child: Text('Go')),
                                   ElevatedButton(
                                       onPressed: () {}, child: Text('Cancel'))
                                 ],
