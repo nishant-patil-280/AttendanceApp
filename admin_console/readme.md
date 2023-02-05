@@ -28,3 +28,4 @@
 2. data is then send to app.js where data is parsed and encoded through middleware.
 3. this data is then sent to user.js through userRouter in app.js.
 4. here data is then updated into main DB.
+5. same is the working for other routes
