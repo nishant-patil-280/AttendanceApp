@@ -1,7 +1,54 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:web_socket_channel/io.dart';
 import 'package:teacher_app/view/teacher_home_page.dart';
 import 'package:teacher_app/view/teacher_map_page.dart';
 import 'package:teacher_app/view/teacher_view_attendance_page.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:dio/dio.dart';
+
+void sendMessage(msg) {
+  IOWebSocketChannel? channel;
+  // We use a try - catch statement, because the connection might fail.
+  try {
+    // Connect to our backend.
+    channel = IOWebSocketChannel.connect('ws://10.0.2.2:3000');
+  } catch (e) {
+    // If there is any error that might be because you need to use another connection.
+    print("Error on connecting to websocket: " + e.toString());
+  }
+  // Send message to backend
+  channel?.sink.add(msg);
+
+  // Listen for any message from backend
+  channel?.stream.listen((event) {
+    // Just making sure it is not empty
+    if (event!.isNotEmpty) {
+      print(event);
+      // Now only close the connection and we are done here!
+      channel!.sink.close();
+    }
+  });
+}
+
+void getTest() async {
+  BaseOptions options = BaseOptions(
+    baseUrl: "http://10.0.2.2:3000",
+    // connectTimeout: 1000,
+    // receiveTimeout: 3000,
+  );
+  print(options.baseUrl);
+  Dio dio = Dio(options);
+  try {
+    print(options.baseUrl + "/test");
+    Response resp = await dio.post(
+      options.baseUrl + "/test",
+    );
+  } catch (e) {
+    print("Exception: $e");
+  }
+}
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Column(
         children: <Widget>[
           Container(
-            height: height * .40,
+            height: height * .35,
             width: double.infinity,
             // color: Colors.blue[400], use color directly in box decoration
             decoration: BoxDecoration(
@@ -79,8 +126,7 @@ class LoginFormWidget extends StatefulWidget {
 
 class _LoginFormWidgetState extends State<LoginFormWidget> {
   final _formKey = GlobalKey<FormState>();
-  final _userEmailController =
-      TextEditingController(text: 'studentname@ternaengg.ac.in');
+  final _userEmailController = TextEditingController();
   final _userPasswordController = TextEditingController(text: 'password1234');
   final _passwordFocusNode = FocusNode();
   final bool _isPasswordVisible = true;
@@ -150,12 +196,12 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
           ),
           ElevatedButton(
             onPressed: () {
-              _saveForm;
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const TeacherHomePage()),
-              );
+              getTest();
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //       builder: (context) => const TeacherHomePage()),
+              // );
             },
             child: Text('Login'),
             style: ElevatedButton.styleFrom(

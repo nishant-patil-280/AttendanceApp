@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:teacher_app/view/teacher_map_page.dart';
 import 'package:teacher_app/view/timetable.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:teacher_app/view/about.dart';
 
 void getLocation() async {
   await Geolocator.checkPermission();
@@ -161,6 +162,16 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
               title: const Text('View Attendance'),
               onTap: () {
                 Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('About'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const About()),
+                );
               },
             ),
           ],

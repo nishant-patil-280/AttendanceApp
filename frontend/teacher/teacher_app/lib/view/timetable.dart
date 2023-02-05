@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teacher_app/view/about.dart';
 
 class Timetable extends StatefulWidget {
   const Timetable({Key? key}) : super(key: key);
@@ -8,113 +9,19 @@ class Timetable extends StatefulWidget {
 }
 
 class TimetableState extends State<Timetable> {
-  bool light0 = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Teacher Login')),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.all(18),
-                width: MediaQuery.of(context).size.width * .90,
-                decoration: const BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.all(Radius.circular(25)),
-                ),
-                height: 120,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      const Text(
-                        'Give Location Access',
-                        style: TextStyle(
-                            fontSize: 25,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Transform.scale(
-                        scale: 1.5,
-                        child: Switch(
-                          activeColor: Colors.white,
-                          value: light0,
-                          onChanged: (bool value) {
-                            setState(() {
-                              light0 = value;
-                            });
-                          },
-                        ),
-                      )
-                    ]),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * .65,
-            width: double.infinity,
-            child: ListView.builder(
-                itemCount: 25,
-                padding: const EdgeInsets.all(8),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                        color: Colors.purple[100],
-                        child: Padding(
-                          padding: const EdgeInsets.all(7.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(('Branch:')),
-                              Text('DIvision'),
-                              Text('Lecture name'),
-                              Text('Timing :'),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  ElevatedButton(
-                                      onPressed: () {}, child: Text('Go')),
-                                  ElevatedButton(
-                                      onPressed: () {}, child: Text('Cancel'))
-                                ],
-                              )
-                            ],
-                          ),
-                        )),
-                  );
-                }),
-          ),
-          // Row(children: [
-          //   Container(
-          //     margin: const EdgeInsets.all(20),
-          //     decoration: const BoxDecoration(
-          //       color: Colors.blue,
-          //       borderRadius: BorderRadius.all(Radius.circular(25)),
-          //     ),
-          //     height: 200,
-          //     child: Column(
-          //       children: <Widget>[
-          //         const Text(
-          //           'data',
-          //           style: TextStyle(
-          //               fontSize: 25,
-          //               color: Colors.white,
-          //               fontWeight: FontWeight.bold),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ]),
+          const Text('Timetable'),
+          Image.asset('assets/timetableSample.png'),
         ],
       ),
       drawer: Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
         child: ListView(
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
@@ -139,6 +46,16 @@ class TimetableState extends State<Timetable> {
               title: const Text('View Attendance'),
               onTap: () {
                 Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('About'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const About()),
+                );
               },
             ),
           ],
