@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:teacher_app/view/teacher_map_page.dart';
 import 'package:teacher_app/view/timetable.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -90,7 +91,13 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
                                 children: [
                                   ElevatedButton(
                                       onPressed: () {
-                                        getLocation;
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const MapSample()),
+                                        );
+                                        ;
                                       },
                                       child: Text('Go')),
                                   ElevatedButton(

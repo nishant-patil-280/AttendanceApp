@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:teacher_app/view/teacher_home_page.dart';
-import 'package:teacher_app/view/temp.dart';
+import 'package:teacher_app/view/teacher_map_page.dart';
+import 'package:teacher_app/view/teacher_view_attendance_page.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
