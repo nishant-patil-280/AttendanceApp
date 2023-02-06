@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'home_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -92,6 +94,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   ///save form
   _saveForm() {
     _formKey.currentState?.save();
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => HomeScreen()));
   }
 
   @override

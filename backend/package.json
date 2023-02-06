@@ -11,10 +11,15 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+<<<<<<< HEAD
   "devDependencies": {
     "nodemon": "^2.0.20"
   },
   "dependencies": {
+=======
+  "dependencies": {
+    "ejs": "^3.1.8",
+>>>>>>> 35ca3b9104b275c79e1cca8ba2e9eb19ef3fe890
     "express": "^4.18.2"
   }
 }
