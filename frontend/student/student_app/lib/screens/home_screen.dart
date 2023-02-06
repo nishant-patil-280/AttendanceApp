@@ -35,31 +35,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Colors.blue,
                   borderRadius: BorderRadius.all(Radius.circular(25)),
                 ),
-                height: 120,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      const Text(
-                        'Give Location Access',
-                        style: TextStyle(
-                            fontSize: 25,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Transform.scale(
-                        scale: 1.5,
-                        child: Switch(
-                          activeColor: Colors.white,
-                          value: light0,
-                          onChanged: (bool value) {
-                            setState(() {
-                              getLocation();
-                              light0 = value;
-                            });
-                          },
+                height: 75,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        const Text(
+                          'Give Location Access',
+                          style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
                         ),
-                      )
-                    ]),
+                        Transform.scale(
+                          scale: 1.5,
+                          child: Switch(
+                            activeColor: Colors.white,
+                            value: light0,
+                            onChanged: (bool value) {
+                              setState(() {
+                                getLocation();
+                                light0 = value;
+                              });
+                            },
+                          ),
+                        )
+                      ]),
+                ),
               ),
             ],
           ),
@@ -73,32 +76,67 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Card(
-                        color: Colors.purple[100],
-                        child: Padding(
-                          padding: const EdgeInsets.all(7.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(('Branch:')),
-                              Text('DIvision'),
-                              Text('Lecture name'),
-                              Text('Timing :'),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        getLocation;
-                                      },
-                                      child: Text('Go')),
-                                  ElevatedButton(
-                                      onPressed: () {}, child: Text('Cancel'))
-                                ],
-                              )
-                            ],
-                          ),
-                        )),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      color: Color.fromRGBO(0, 0, 0, 0.688),
+                      elevation: 10.0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(7.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Professor: ',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            const Text(
+                              'Lecture name:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            const Text(
+                              'Room no:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            const Text(
+                              'Timing:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    getLocation;
+                                  },
+                                  child: const Text('Mark Atttendance'),
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors
+                                          .redAccent, //background color of button
+                                      side: BorderSide(
+                                          width: 3,
+                                          color: Colors
+                                              .brown), //border width and color
+                                      elevation: 3, //elevation of button
+                                      shape: RoundedRectangleBorder(
+                                          //to set border radius to button
+                                          borderRadius:
+                                              BorderRadius.circular(30)),
+                                      padding: EdgeInsets.all(8)),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   );
                 }),
           ),
@@ -133,11 +171,14 @@ class _HomeScreenState extends State<HomeScreen> {
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
+            UserAccountsDrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
-              child: Text('Teacher Login'),
+              currentAccountPicture: Image.network(
+                  'https://th.bing.com/th?id=ODL.b888a41f9a8eb720963897b5e5430fc1&w=100&h=100&c=12&pcl=faf9f7&o=6&dpr=1.3&pid=13.1'),
+              accountName: Text('Welcome  Emma'),
+              accountEmail: Text('emma@ternaengg.ac.in'),
             ),
             ListTile(
               title: const Text('View Timetable'),
