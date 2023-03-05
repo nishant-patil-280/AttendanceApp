@@ -1,6 +1,29 @@
 import 'dart:io';
 import 'package:student_app/view/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+
+void checkLogin(String username, String password) async {
+  BaseOptions options =
+      BaseOptions(baseUrl: "http://192.168.0.104:3000", headers: {
+    HttpHeaders.acceptHeader: "json/application/json",
+    HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
+  }
+          // connectTimeout: 1000,
+          // receiveTimeout: 3000,
+          );
+  Dio dio = Dio(options);
+  try {
+    Response resp = await dio.post(
+      options.baseUrl + "/student_login",
+      data: {"username": username, "password": password},
+    );
+  } catch (e) {
+    print("Exception: $e");
+  }
+
+  dio.close();
+}
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,56 +38,59 @@ class _LoginScreenState extends State<LoginScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return SafeArea(
-        child: Scaffold(
-      body: Column(
-        children: <Widget>[
-          Container(
-            height: height * .35,
-            width: double.infinity,
-            // color: Colors.blue[400], use color directly in box decoration
-            decoration: BoxDecoration(
-                color: Colors.blue[400],
-                borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(25),
-                    bottomRight: Radius.circular(25))),
-            child: Stack(
-              children: <Widget>[
-                // Image.asset(
-                //   'assets/images/tick.png',
-                //   height: MediaQuery.of(context).size.height * .25,
-                // ),
-                Positioned(
-                  left: 25,
-                  bottom: 50,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Welcome',
-                        style: TextStyle(
-                            color: Colors.white, fontSize: width * .15),
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                height: height * .35,
+                width: double.infinity,
+                // color: Colors.blue[400], use color directly in box decoration
+                decoration: BoxDecoration(
+                    color: Colors.blue[400],
+                    borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(25),
+                        bottomRight: Radius.circular(25))),
+                child: Stack(
+                  children: <Widget>[
+                    // Image.asset(
+                    //   'assets/images/tick.png',
+                    //   height: MediaQuery.of(context).size.height * .25,
+                    // ),
+                    Positioned(
+                      left: 25,
+                      bottom: 50,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Welcome',
+                            style: TextStyle(
+                                color: Colors.white, fontSize: width * .15),
+                          ),
+                          Text(
+                            'Student',
+                            style: TextStyle(
+                                color: Colors.white, fontSize: width * .15),
+                          ),
+                        ],
                       ),
-                      Text(
-                        'Student',
-                        style: TextStyle(
-                            color: Colors.white, fontSize: width * .15),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: height * .10,
+              ),
+              LoginFormWidget(
+                height: height,
+              ),
+            ],
           ),
-          SizedBox(
-            width: double.infinity,
-            height: height * .10,
-          ),
-          LoginFormWidget(
-            height: height,
-          ),
-        ],
+        ),
       ),
-    ));
+    );
   }
 }
 
@@ -149,10 +175,11 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
           ElevatedButton(
             onPressed: () {
               _saveForm();
+              checkLogin(
+                  _userEmailController.text, _userPasswordController.text);
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const StudentHomePage()),
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
               );
             },
             child: Text('Login'),

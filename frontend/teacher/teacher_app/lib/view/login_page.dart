@@ -1,53 +1,52 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:web_socket_channel/io.dart';
 import 'package:teacher_app/view/teacher_home_page.dart';
-import 'package:teacher_app/view/teacher_map_page.dart';
-import 'package:teacher_app/view/teacher_view_attendance_page.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:dio/dio.dart';
 
-void sendMessage(msg) {
-  IOWebSocketChannel? channel;
-  // We use a try - catch statement, because the connection might fail.
-  try {
-    // Connect to our backend.
-    channel = IOWebSocketChannel.connect('ws://10.0.2.2:3000');
-  } catch (e) {
-    // If there is any error that might be because you need to use another connection.
-    print("Error on connecting to websocket: " + e.toString());
+void test() async {
+  BaseOptions options =
+      BaseOptions(baseUrl: "http://192.168.0.104:3000", headers: {
+    HttpHeaders.acceptHeader: "json/application/json",
+    HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
   }
-  // Send message to backend
-  channel?.sink.add(msg);
-
-  // Listen for any message from backend
-  channel?.stream.listen((event) {
-    // Just making sure it is not empty
-    if (event!.isNotEmpty) {
-      print(event);
-      // Now only close the connection and we are done here!
-      channel!.sink.close();
-    }
-  });
-}
-
-void getTest() async {
-  BaseOptions options = BaseOptions(
-    baseUrl: "http://10.0.2.2:3000",
-    // connectTimeout: 1000,
-    // receiveTimeout: 3000,
-  );
-  print(options.baseUrl);
+          // connectTimeout: 1000,
+          // receiveTimeout: 3000,
+          );
   Dio dio = Dio(options);
   try {
-    print(options.baseUrl + "/test");
-    Response resp = await dio.post(
+    Response resp = await dio.get(
       options.baseUrl + "/test",
     );
+    print(resp.data);
+    var info = resp.data;
   } catch (e) {
     print("Exception: $e");
   }
+  dio.close();
+}
+
+void checkLogin(String username, String password) async {
+  BaseOptions options =
+      BaseOptions(baseUrl: "http://192.168.74.25:3000", headers: {
+    HttpHeaders.acceptHeader: "json/application/json",
+    HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
+  }
+          // connectTimeout: 1000,
+          // receiveTimeout: 3000,
+          );
+  Dio dio = Dio(options);
+  try {
+    Response resp = await dio.post(
+      options.baseUrl + "/login",
+      data: {"username": username, "password": password},
+    );
+    print(resp);
+  } catch (e) {
+    print("Exception: $e");
+  }
+
+  dio.close();
 }
 
 class LoginScreen extends StatefulWidget {
@@ -64,53 +63,55 @@ class _LoginScreenState extends State<LoginScreen> {
     final width = MediaQuery.of(context).size.width;
     return SafeArea(
         child: Scaffold(
-      body: Column(
-        children: <Widget>[
-          Container(
-            height: height * .35,
-            width: double.infinity,
-            // color: Colors.blue[400], use color directly in box decoration
-            decoration: BoxDecoration(
-                color: Colors.blue[400],
-                borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(25),
-                    bottomRight: Radius.circular(25))),
-            child: Stack(
-              children: <Widget>[
-                // Image.asset(
-                //   'assets/images/tick.png',
-                //   height: MediaQuery.of(context).size.height * .25,
-                // ),
-                Positioned(
-                  left: 25,
-                  bottom: 50,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Welcome',
-                        style: TextStyle(
-                            color: Colors.white, fontSize: width * .15),
-                      ),
-                      Text(
-                        'Student',
-                        style: TextStyle(
-                            color: Colors.white, fontSize: width * .15),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: height * .35,
+              width: double.infinity,
+              // color: Colors.blue[400], use color directly in box decoration
+              decoration: BoxDecoration(
+                  color: Colors.blue[400],
+                  borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25))),
+              child: Stack(
+                children: <Widget>[
+                  // Image.asset(
+                  //   'assets/images/tick.png',
+                  //   height: MediaQuery.of(context).size.height * .25,
+                  // ),
+                  Positioned(
+                    left: 25,
+                    bottom: 50,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Welcome',
+                          style: TextStyle(
+                              color: Colors.white, fontSize: width * .15),
+                        ),
+                        Text(
+                          'Teacher',
+                          style: TextStyle(
+                              color: Colors.white, fontSize: width * .15),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            width: double.infinity,
-            height: height * .10,
-          ),
-          LoginFormWidget(
-            height: height,
-          ),
-        ],
+            SizedBox(
+              width: double.infinity,
+              height: height * .10,
+            ),
+            LoginFormWidget(
+              height: height,
+            ),
+          ],
+        ),
       ),
     ));
   }
@@ -143,6 +144,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
     _formKey.currentState?.save();
   }
 
+  // Future<String> value = test();
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -171,7 +174,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 }
               }),
               onSaved: ((newValue) {}),
-              decoration: InputDecoration(label: Text('Enter your Email id')),
+              decoration: InputDecoration(label: Text('Enter your Login id')),
             ),
           ),
           Padding(
@@ -196,12 +199,13 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
           ),
           ElevatedButton(
             onPressed: () {
-              getTest();
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //       builder: (context) => const TeacherHomePage()),
-              // );
+              checkLogin(
+                  _userEmailController.text, _userPasswordController.text);
+              // test();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TeacherHomePage()),
+              );
             },
             child: Text('Login'),
             style: ElevatedButton.styleFrom(

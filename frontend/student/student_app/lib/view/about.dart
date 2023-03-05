@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:student_app/view/timetable.dart';
+import 'package:student_app/view/profile.dart';
 
 class About extends StatelessWidget {
   const About({Key? key}) : super(key: key);
@@ -25,6 +26,16 @@ class About extends StatelessWidget {
                 color: Colors.blue,
               ),
               child: Text('Student Login'),
+            ),
+            ListTile(
+              title: const Text('Profile'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Profile()),
+                );
+              },
             ),
             ListTile(
               title: const Text('View Timetable'),

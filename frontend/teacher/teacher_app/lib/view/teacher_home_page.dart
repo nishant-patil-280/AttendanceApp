@@ -1,9 +1,36 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:teacher_app/view/teacher_map_page.dart';
 import 'package:teacher_app/view/timetable.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:teacher_app/view/about.dart';
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
+
+void test() async {
+  BaseOptions options =
+      BaseOptions(baseUrl: "http://192.168.0.104:3000", headers: {
+    HttpHeaders.acceptHeader: "json/application/json",
+    HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
+  }
+          // connectTimeout: 1000,
+          // receiveTimeout: 3000,
+          );
+  Dio dio = Dio(options);
+  try {
+    Response resp = await dio.get(
+      options.baseUrl + "/test",
+    );
+    print(resp.data);
+    var info = resp.data;
+  } catch (e) {
+    print("Exception: $e");
+  }
+  dio.close();
+}
 
 void getLocation() async {
   await Geolocator.checkPermission();
@@ -11,9 +38,29 @@ void getLocation() async {
   Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high);
   print(position);
+
+  BaseOptions options =
+      BaseOptions(baseUrl: "http://192.168.74.25:3000", headers: {
+    HttpHeaders.acceptHeader: "json/application/json",
+    HttpHeaders.contentTypeHeader: "application/x-www-form-urlencoded"
+  }
+          // connectTimeout: 1000,
+          // receiveTimeout: 3000,
+          );
+  Dio dio = Dio(options);
+  try {
+    Response resp =
+        await dio.post(options.baseUrl + "/location", data: {"data": position});
+    print(resp.data);
+    var info = resp.data;
+  } catch (e) {
+    print("Exception: $e");
+  }
+  dio.close();
 }
 
 class TeacherHomePage extends StatefulWidget {
+  //final Future<String> value;
   const TeacherHomePage({Key? key}) : super(key: key);
 
   @override
@@ -22,6 +69,7 @@ class TeacherHomePage extends StatefulWidget {
 
 class _TeacherHomePageState extends State<TeacherHomePage> {
   bool light0 = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,31 +86,34 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
                   color: Colors.blue,
                   borderRadius: BorderRadius.all(Radius.circular(25)),
                 ),
-                height: 120,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      const Text(
-                        'Give Location Access',
-                        style: TextStyle(
-                            fontSize: 25,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Transform.scale(
-                        scale: 1.5,
-                        child: Switch(
-                          activeColor: Colors.white,
-                          value: light0,
-                          onChanged: (bool value) {
-                            setState(() {
-                              getLocation();
-                              light0 = value;
-                            });
-                          },
+                height: 75,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        const Text(
+                          'Give Location Access',
+                          style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
                         ),
-                      )
-                    ]),
+                        Transform.scale(
+                          scale: 1.5,
+                          child: Switch(
+                            activeColor: Colors.white,
+                            value: light0,
+                            onChanged: (bool value) {
+                              setState(() {
+                                getLocation();
+                                light0 = value;
+                              });
+                            },
+                          ),
+                        )
+                      ]),
+                ),
               ),
             ],
           ),
@@ -76,38 +127,85 @@ class _TeacherHomePageState extends State<TeacherHomePage> {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Card(
-                        color: Colors.purple[100],
-                        child: Padding(
-                          padding: const EdgeInsets.all(7.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(('Branch:')),
-                              Text('DIvision'),
-                              Text('Lecture name'),
-                              Text('Timing :'),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const MapSample()),
-                                        );
-                                        ;
-                                      },
-                                      child: Text('Go')),
-                                  ElevatedButton(
-                                      onPressed: () {}, child: Text('Cancel'))
-                                ],
-                              )
-                            ],
-                          ),
-                        )),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      color: const Color.fromRGBO(0, 0, 0, 0.688),
+                      elevation: 10.0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(7.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Lecture name:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            const Text(
+                              'Room no:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            const Text(
+                              'Timing:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const MapSample()),
+                                    );
+                                  },
+                                  child: const Text('Go!'),
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors
+                                          .redAccent, //background color of button
+                                      side: const BorderSide(
+                                          width: 3,
+                                          color: Colors
+                                              .brown), //border width and color
+                                      elevation: 3, //elevation of button
+                                      shape: RoundedRectangleBorder(
+                                          //to set border radius to button
+                                          borderRadius:
+                                              BorderRadius.circular(30)),
+                                      padding: const EdgeInsets.all(8)),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    getLocation;
+                                  },
+                                  child: const Text('Cancel'),
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors
+                                          .redAccent, //background color of button
+                                      side: const BorderSide(
+                                          width: 3,
+                                          color: Colors
+                                              .brown), //border width and color
+                                      elevation: 3, //elevation of button
+                                      shape: RoundedRectangleBorder(
+                                          //to set border radius to button
+                                          borderRadius:
+                                              BorderRadius.circular(30)),
+                                      padding: const EdgeInsets.all(8)),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   );
                 }),
           ),

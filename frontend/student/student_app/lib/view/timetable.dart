@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:student_app/view/about.dart';
+import 'package:student_app/view/profile.dart';
 
 class Timetable extends StatefulWidget {
   const Timetable({Key? key}) : super(key: key);
@@ -36,6 +37,10 @@ class TimetableState extends State<Timetable> {
               title: const Text('Profile'),
               onTap: () {
                 Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Profile()),
+                );
               },
             ),
             ListTile(

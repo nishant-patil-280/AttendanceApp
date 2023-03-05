@@ -41,6 +41,15 @@ class MapSampleState extends State<MapSample> {
     position: LatLng(Temp.lat, Temp.lng),
   );
 
+  static final Circle _circle1 = Circle(
+    circleId: CircleId("1"),
+    center: LatLng(Temp.lat, Temp.lng),
+    radius: 25,
+    fillColor: Colors.redAccent.withOpacity(0.4),
+    strokeColor: Colors.redAccent,
+    strokeWidth: 3,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,6 +67,7 @@ class MapSampleState extends State<MapSample> {
               borderRadius: BorderRadius.all(Radius.circular(25)),
               child: GoogleMap(
                 markers: {_marker1},
+                circles: {_circle1},
                 mapType: MapType.normal,
                 initialCameraPosition: _kGooglePlex,
                 onMapCreated: (GoogleMapController controller) {
